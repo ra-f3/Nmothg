@@ -2,9 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام الفصول الذكية المتكامل | Shagsu ERP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>منظومة Shagsu التعليمية الذكية</title>
     <link rel="icon" href="images/logo.png" type="image/png">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -13,228 +14,169 @@
 
     <div id="loader">
         <div class="spinner"></div>
-        <p>جاري تحميل النظام المدرسي...</p>
+        <p>جاري تحميل النظام...</p>
     </div>
 
     <section id="auth-view">
-        <div class="login-container">
-            <div class="login-header">
-                <img src="images/logo.png" alt="شعار" class="logo-lg">
-                <h1>نظام الإدارة المدرسية</h1>
-                <p>بوابة الدخول الموحدة (إداري - طالب)</p>
+        <div class="login-wrapper">
+            <div class="brand-area">
+                <img src="images/logo.png" alt="Logo" class="animate-logo">
+                <h1>Shagsu Edu</h1>
+                <p>الجيل القادم من الإدارة المدرسية</p>
             </div>
             
-            <div class="login-box">
-                <div class="user-type-selector">
-                    <label>
-                        <input type="radio" name="role" value="admin" checked onclick="setRole('admin')">
-                        <span class="type-box"><i class="fas fa-user-tie"></i> مدير / معلم</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="role" value="student" onclick="setRole('student')">
-                        <span class="type-box"><i class="fas fa-user-graduate"></i> طالب</span>
-                    </label>
-                </div>
+            <div class="login-form-container">
+                <button onclick="loginWithGoogle()" class="btn-google">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                    تسجيل الدخول عبر Google
+                </button>
+                
+                <div class="separator"><span>أو</span></div>
 
-                <form id="login-form">
-                    <div class="input-group">
+                <form id="email-login-form">
+                    <div class="input-box">
                         <i class="fas fa-envelope"></i>
                         <input type="email" id="email" placeholder="البريد الإلكتروني" required>
                     </div>
-                    <div class="input-group">
+                    <div class="input-box">
                         <i class="fas fa-lock"></i>
                         <input type="password" id="password" placeholder="كلمة المرور" required>
                     </div>
-                    <div id="auth-msg" class="alert"></div>
-                    <button type="submit" class="btn-login">تسجيل الدخول <i class="fas fa-arrow-left"></i></button>
+                    <div id="auth-error" class="alert error"></div>
+                    <button type="submit" class="btn-primary full">دخول للنظام</button>
                 </form>
-                <div class="login-footer">
-                    <span onclick="toggleSignup()" id="signup-link">تسجيل حساب جديد</span>
-                </div>
+                
+                <p class="toggle-link" onclick="toggleSignup()">ليس لديك حساب؟ إنشاء حساب جديد</p>
             </div>
         </div>
     </section>
 
     <section id="main-app" style="display: none;">
         
-        <aside class="sidebar">
-            <div class="sidebar-header">
+        <header class="mobile-header">
+            <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="logo-mobile">
                 <img src="images/logo.png" alt="Logo">
-                <h3>الفصول الذكية</h3>
+                <span>Shagsu</span>
+            </div>
+            <div class="user-avatar-sm" onclick="toggleProfileMenu()">
+                <img src="https://ui-avatars.com/api/?name=User&background=random" id="header-avatar">
+            </div>
+        </header>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-head">
+                <img src="images/logo.png" alt="Logo">
+                <h3>منصة Shagsu</h3>
             </div>
             
-            <ul class="menu-links">
-                <li onclick="navigate('dashboard')" class="active"><i class="fas fa-home"></i> <span>الرئيسية</span></li>
+            <div class="user-info-widget">
+                <div class="xp-circle">
+                    <svg viewBox="0 0 36 36" class="circular-chart orange">
+                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="circle" stroke-dasharray="75, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <text x="18" y="20.35" class="percentage">Lvl 5</text>
+                    </svg>
+                </div>
+                <div class="info-text">
+                    <h4 id="sidebar-name">جاري التحميل...</h4>
+                    <span class="role-badge" id="sidebar-role">طالب</span>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#" onclick="navigate('dashboard')" class="active"><i class="fas fa-th-large"></i> لوحة القيادة</a>
+                <a href="#" onclick="navigate('school-wall')"><i class="fas fa-newspaper"></i> حائط المدرسة <span class="badge-new">جديد</span></a>
                 
-                <li class="admin-only" onclick="navigate('students')"><i class="fas fa-users"></i> <span>إدارة الطلاب</span></li>
-                <li class="admin-only" onclick="navigate('classes')"><i class="fas fa-chalkboard"></i> <span>الفصول الدراسية</span></li>
-                <li class="admin-only" onclick="navigate('grades')"><i class="fas fa-star"></i> <span>رصد الدرجات</span></li>
-                
-                <li onclick="navigate('assignments')"><i class="fas fa-book-open"></i> <span>الواجبات والمهام</span></li>
-                <li onclick="navigate('leaves')"><i class="fas fa-notes-medical"></i> <span>الإجازات المرضية</span></li>
-                
-                <li class="student-only" onclick="navigate('my-grades')"><i class="fas fa-chart-line"></i> <span>نتائجي</span></li>
-                
-                <li onclick="logout()" class="logout-item"><i class="fas fa-sign-out-alt"></i> <span>تسجيل خروج</span></li>
-            </ul>
+                <div class="admin-links">
+                    <span class="nav-label">الإدارة</span>
+                    <a href="#" onclick="navigate('students')"><i class="fas fa-users"></i> الطلاب</a>
+                    <a href="#" onclick="navigate('teachers')"><i class="fas fa-chalkboard-teacher"></i> المعلمين</a>
+                </div>
+
+                <div class="student-links">
+                    <span class="nav-label">أدواتي</span>
+                    <a href="#" onclick="navigate('assignments')"><i class="fas fa-book"></i> الواجبات</a>
+                    <a href="#" onclick="navigate('leaves')"><i class="fas fa-notes-medical"></i> الإجازات</a>
+                </div>
+
+                <a href="#" onclick="logout()" class="logout-link"><i class="fas fa-sign-out-alt"></i> خروج</a>
+            </nav>
         </aside>
 
-        <main class="content-area">
+        <main class="content-wrapper" onclick="closeSidebarOnMobile()">
             
-            <header class="top-bar">
-                <div class="page-title" id="page-title">الرئيسية</div>
-                <div class="user-profile">
-                    <span id="user-name">المدير العام</span>
-                    <div class="avatar"><i class="fas fa-user"></i></div>
-                </div>
-            </header>
-
-            <div id="view-dashboard" class="view-section active">
-                <div class="stats-grid">
-                    <div class="stat-card blue">
-                        <div class="info">
-                            <h3>الطلاب</h3>
-                            <p id="count-students">0</p>
-                        </div>
-                        <i class="fas fa-user-graduate"></i>
+            <div id="view-dashboard" class="view active">
+                <div class="welcome-banner">
+                    <div class="text">
+                        <h2>مرحباً، <span id="dash-name">...</span> 👋</h2>
+                        <p>إليك ملخص ما يحدث في مدرستك اليوم.</p>
                     </div>
-                    <div class="stat-card green">
-                        <div class="info">
-                            <h3>المعلمين</h3>
-                            <p>12</p>
-                        </div>
-                        <i class="fas fa-chalkboard-teacher"></i>
+                    <img src="images/logo.png" class="banner-img">
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="icon-box purple"><i class="fas fa-user-graduate"></i></div>
+                        <div><h3>الطلاب</h3><p id="stat-students">0</p></div>
                     </div>
                     <div class="stat-card orange">
-                        <div class="info">
-                            <h3>طلبات الإجازة</h3>
-                            <p id="count-leaves">0</p>
-                        </div>
-                        <i class="fas fa-file-medical"></i>
+                        <div class="icon-box orange"><i class="fas fa-star"></i></div>
+                        <div><h3>نقاطي (XP)</h3><p id="stat-xp">1,250</p></div>
                     </div>
-                    <div class="stat-card purple">
-                        <div class="info">
-                            <h3>الواجبات النشطة</h3>
-                            <p id="count-assignments">0</p>
-                        </div>
-                        <i class="fas fa-tasks"></i>
+                    <div class="stat-card blue">
+                        <div class="icon-box blue"><i class="fas fa-tasks"></i></div>
+                        <div><h3>الواجبات</h3><p>3 نشطة</p></div>
                     </div>
                 </div>
 
-                <div class="chart-container">
-                    <h3>📊 إحصائيات الحضور لهذا الأسبوع</h3>
-                    <div class="simple-chart">
-                        <div class="bar" style="height: 80%;" title="الأحد"><span>الأحد</span></div>
-                        <div class="bar" style="height: 95%;" title="الاثنين"><span>الاثنين</span></div>
-                        <div class="bar" style="height: 60%;" title="الثلاثاء"><span>الثلاثاء</span></div>
-                        <div class="bar" style="height: 85%;" title="الأربعاء"><span>الأربعاء</span></div>
-                        <div class="bar" style="height: 70%;" title="الخميس"><span>الخميس</span></div>
+                <div class="section-title"><h3>📌 آخر التحديثات</h3></div>
+                <div id="latest-wall-posts">
                     </div>
+            </div>
+
+            <div id="view-school-wall" class="view">
+                <div class="wall-header">
+                    <h2><i class="fas fa-bullhorn"></i> أخبار المدرسة</h2>
+                    <button class="btn-primary admin-only" onclick="openModal('post-modal')"><i class="fas fa-plus"></i> خبر جديد</button>
+                </div>
+                
+                <div id="wall-feed" class="wall-feed">
+                    <div class="post-card skeleton"></div>
+                    <div class="post-card skeleton"></div>
                 </div>
             </div>
 
-            <div id="view-students" class="view-section">
-                <div class="action-bar">
-                    <button onclick="openModal('student-modal')" class="btn-action"><i class="fas fa-plus"></i> إضافة طالب جديد</button>
-                    <input type="text" placeholder="بحث عن طالب..." class="search-input">
+            <div id="view-students" class="view">
+                <div class="table-header">
+                    <h2>سجلات الطلاب</h2>
+                    <button class="btn-primary" onclick="openModal('add-student-modal')">إضافة طالب</button>
                 </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>اسم الطالب</th>
-                                <th>رقم الهوية</th>
-                                <th>الفصل</th>
-                                <th>الحالة</th>
-                                <th>إجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="students-table-body">
-                            </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="view-grades" class="view-section">
-                <div class="card-panel">
-                    <h3>رصد درجات الطلاب</h3>
-                    <div class="form-row">
-                        <select id="grade-student-select" class="input-std">
-                            <option>اختر الطالب...</option>
-                        </select>
-                        <select id="grade-subject" class="input-std">
-                            <option value="رياضيات">رياضيات</option>
-                            <option value="فيزياء">فيزياء</option>
-                            <option value="كيمياء">كيمياء</option>
-                            <option value="لغة عربية">لغة عربية</option>
-                        </select>
-                        <input type="number" id="grade-value" placeholder="الدرجة (من 100)" class="input-std">
-                        <button onclick="saveGrade()" class="btn-action">رصد الدرجة</button>
-                    </div>
-                </div>
-                <div class="table-container">
-                    <h4>آخر العمليات</h4>
-                    <table id="grades-history-table">
-                        <thead><tr><th>الطالب</th><th>المادة</th><th>الدرجة</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                 </div>
-            </div>
-
-            <div id="view-leaves" class="view-section">
-                <div class="student-only card-panel">
-                    <h3><i class="fas fa-upload"></i> رفع تقرير طبي جديد</h3>
-                    <div class="upload-area">
-                        <input type="text" id="leave-name" placeholder="الاسم الكامل" class="input-std">
-                        <input type="text" id="leave-id" placeholder="رقم الهوية" class="input-std">
-                        <input type="file" id="leave-file" accept="application/pdf" class="input-file">
-                        <button onclick="uploadLeave()" class="btn-action">إرسال للمدير</button>
-                        <div id="upload-status"></div>
-                    </div>
-                </div>
-
-                <div class="admin-only table-container">
-                    <h3>الطلبات الواردة</h3>
-                    <table id="leaves-admin-table">
+                <div class="table-responsive">
+                    <table class="modern-table">
                         <thead>
                             <tr>
                                 <th>الطالب</th>
-                                <th>الهوية</th>
-                                <th>التاريخ</th>
-                                <th>الملف</th>
-                                <th>قرار</th>
+                                <th>المستوى</th>
+                                <th>النقاط</th>
+                                <th>إجراء</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody id="students-table"></tbody>
                     </table>
                 </div>
             </div>
-
-             <div id="view-assignments" class="view-section">
-                 <div class="admin-only card-panel">
-                     <h3>نشر واجب جديد</h3>
-                     <textarea id="assign-content" placeholder="اكتب تفاصيل الواجب..." rows="3" style="width:100%"></textarea>
-                     <button onclick="postAssignment()" class="btn-action">نشر الآن</button>
-                 </div>
-                 <div id="assignments-list" class="grid-cards">
-                     </div>
-             </div>
 
         </main>
     </section>
 
-    <div id="student-modal" class="modal">
+    <div id="post-modal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('student-modal')">&times;</span>
-            <h2>تسجيل طالب جديد</h2>
-            <input type="text" id="new-std-name" placeholder="الاسم الثلاثي" class="input-std">
-            <input type="text" id="new-std-id" placeholder="رقم الهوية" class="input-std">
-            <select id="new-std-grade" class="input-std">
-                <option value="أول ثانوي">أول ثانوي</option>
-                <option value="ثاني ثانوي">ثاني ثانوي</option>
-                <option value="ثالث ثانوي">ثالث ثانوي</option>
-            </select>
-            <button onclick="addNewStudent()" class="btn-action full">حفظ</button>
+            <span class="close-modal" onclick="closeModal('post-modal')">&times;</span>
+            <h3>نشر خبر جديد</h3>
+            <input type="text" id="post-title" placeholder="عنوان الخبر" class="input-std">
+            <textarea id="post-content" rows="4" placeholder="تفاصيل الخبر..." class="input-std"></textarea>
+            <button onclick="publishPost()" class="btn-primary full">نشر الآن</button>
         </div>
     </div>
 
