@@ -5,25 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>منظومة Shagsu التعليمية</title>
     
-    <link rel="icon" href="images/IMG_3825.png" type="image/png">
+    <link rel="icon" href="IMG_3825.png" type="image/png">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="loader">
         <div class="spinner"></div>
-        <p>جاري تجهيز النظام...</p>
+        <p>جاري تحميل النظام...</p>
     </div>
 
     <section id="auth-view">
         <div class="login-card">
             
             <div class="brand-identity">
-                <img src="images/IMG_3825.png" alt="Logo" class="logo-img">
+                <img src="IMG_3825.png" alt="Logo" class="logo-img">
                 <div class="logo-text">
                     <span>SHAGSU</span>
                     <span class="highlight">EDU</span>
@@ -58,7 +57,7 @@
     <div id="role-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <img src="images/IMG_3825.png" width="60">
+                <img src="IMG_3825.png" width="60" style="margin-bottom: 10px;">
                 <h3>أهلاً بك في العائلة!</h3>
                 <p>الرجاء تحديد صفتك لإعداد حسابك:</p>
             </div>
@@ -86,7 +85,7 @@
             <button onclick="toggleSidebar()" class="menu-btn"><i class="fas fa-bars"></i></button>
             
             <div class="header-brand">
-                <img src="images/IMG_3825.png" alt="logo">
+                <img src="IMG_3825.png" alt="logo">
                 <span class="logo-text-sm">SHAGSU <span class="highlight">EDU</span></span>
             </div>
 
@@ -98,7 +97,7 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="brand-identity small">
-                    <img src="images/IMG_3825.png" class="logo-img">
+                    <img src="IMG_3825.png" class="logo-img">
                     <div class="logo-text">SHAGSU <span class="highlight">EDU</span></div>
                 </div>
             </div>
@@ -128,32 +127,44 @@
         </aside>
 
         <main class="content-area">
+            
             <div id="view-dashboard" class="view active">
                 <div class="welcome-card">
                     <h2>مرحباً بك في نظامك المدرسي 👋</h2>
-                    <p>كل ما تحتاجه لإدارة يومك الدراسي موجود هنا.</p>
+                    <p>نظام ذكي متكامل يجمع بين الإدارة والتعليم في مكان واحد.</p>
                 </div>
+                
                 <div class="stats-container">
                     <div class="stat-box purple">
-                        <h3>الطلاب</h3>
+                        <h3><i class="fas fa-users"></i> الطلاب</h3>
                         <p>1,250</p>
                     </div>
                     <div class="stat-box orange">
-                        <h3>الواجبات</h3>
+                        <h3><i class="fas fa-book"></i> الواجبات</h3>
                         <p>5 نشطة</p>
+                    </div>
+                    <div class="stat-box blue">
+                        <h3><i class="fas fa-star"></i> التقييم</h3>
+                        <p>ممتاز</p>
                     </div>
                 </div>
             </div>
             
             <div id="view-students" class="view">
-                <h2>سجل الطلاب</h2>
-                <p>محتوى صفحة الطلاب...</p>
+                <h2><i class="fas fa-users"></i> سجل الطلاب</h2>
+                <p>هنا تظهر قائمة الطلاب (خاص بالمدير).</p>
             </div>
             
             <div id="view-assignments" class="view">
-                <h2>الواجبات المدرسية</h2>
-                <p>محتوى الواجبات...</p>
+                <h2><i class="fas fa-book-open"></i> الواجبات المدرسية</h2>
+                <p>قائمة الواجبات والمهام المطلوبة.</p>
             </div>
+
+            <div id="view-leaves" class="view">
+                <h2><i class="fas fa-file-medical"></i> طلبات الإجازة</h2>
+                <p>رفع التقارير الطبية.</p>
+            </div>
+
         </main>
     </section>
 
