@@ -3,63 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="نظام إدارة الفصول الذكية">
-    <title>منصة الفصول الذكية</title>
-    
+    <title>نظام الفصول الذكية (Shagsu)</title>
+    <link rel="icon" href="images/logo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="loader">جاري الاتصال...</div>
+    <div id="loader">جاري تحميل النظام...</div>
 
     <section id="auth-view">
         <div class="auth-card">
-            <h2 id="auth-title">تسجيل دخول المدير</h2>
-            <input type="email" id="email" class="input-field" placeholder="البريد الإلكتروني">
-            <input type="password" id="password" class="input-field" placeholder="كلمة المرور">
-            <div id="auth-msg" class="alert"></div>
-            <button id="auth-btn" class="btn btn-primary">دخول للنظام</button>
-            <p class="link-text" id="toggle-auth">إنشاء حساب جديد</p>
+            <img src="images/logo.png" alt="شعار" class="login-logo">
+            <h2>بوابة الدخول الموحدة</h2>
+            
+            <div class="role-switch">
+                <button class="role-btn active" onclick="setRole('admin')">👨‍💼 مدير مدرسة</button>
+                <button class="role-btn" onclick="setRole('student')">👨‍🎓 طالب</button>
+            </div>
+
+            <form id="login-form">
+                <input type="email" id="email" class="input-field" placeholder="البريد الإلكتروني" required>
+                <input type="password" id="password" class="input-field" placeholder="كلمة المرور" required>
+                <div id="auth-msg" class="alert"></div>
+                <button type="submit" id="login-btn" class="btn btn-primary">دخول</button>
+            </form>
+            
+            <p class="link-text" onclick="toggleSignup()" id="signup-link">إنشاء حساب جديد</p>
         </div>
     </section>
 
-    <section id="dashboard-view">
+    <section id="admin-view" style="display: none;">
         <header>
-            <div class="brand">🎓 الفصول الذكية</div>
-            <div>
-                <span id="user-display"></span>
-                <button id="logout-btn" class="btn btn-primary" style="width: auto; padding: 5px 15px;">خروج</button>
+            <div class="brand">
+                <img src="images/logo.png" class="header-logo">
+                <span>الإدارة المدرسية</span>
             </div>
+            <button onclick="logout()" class="btn btn-danger small">تسجيل خروج</button>
         </header>
 
-        <div class="hero">
-            <h1>لوحة القيادة المدرسية</h1>
-            <p>نظام إدارة متكامل</p>
-        </div>
+        <div class="container">
+            <div class="stats-bar">
+                <div class="stat-box">عدد الطلاب: <span id="student-count">0</span></div>
+                <div class="stat-box">طلبات الإجازة: <span id="leave-count">0</span></div>
+            </div>
 
-        <div class="grid-container">
-            <div class="card">
-                <span class="card-icon">👥</span>
-                <h3>الطلاب</h3>
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showTab('leaves-tab')">📄 الإجازات المرضية</button>
+                <button class="tab-btn" onclick="showTab('students-tab')">👥 إدارة الطلاب</button>
+                <button class="tab-btn" onclick="showTab('assignments-tab')">📝 الواجبات</button>
             </div>
-            <div class="card">
-                <span class="card-icon">📊</span>
-                <h3>التقارير</h3>
+
+            <div id="leaves-tab" class="tab-content active">
+                <div class="section-header">
+                    <h3>صندوق الإجازات المرضية الواردة</h3>
+                    <button onclick="window.print()" class="btn btn-secondary">🖨️ طباعة التقرير</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="leaves-table">
+                        <thead>
+                            <tr>
+                                <th>اسم الطالب</th>
+                                <th>رقم الهوية</th>
+                                <th>الفصل</th>
+                                <th>تاريخ الرفع</th>
+                                <th>الملف (PDF)</th>
+                                <th class="no-print">إجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaves-list">
+                            </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="card">
-                <span class="card-icon">🛡️</span>
-                <h3>الأمان</h3>
+
+            <div id="students-tab" class="tab-content">
+                <h3>إضافة طالب جديد</h3>
+                <div class="form-grid">
+                    <input type="text" id="std-name" placeholder="اسم الطالب الثلاثي">
+                    <input type="text" id="std-id" placeholder="رقم الهوية">
+                    <select id="std-class">
+                        <option value="1">أول ثانوي</option>
+                        <option value="2">ثاني ثانوي</option>
+                        <option value="3">ثالث ثانوي</option>
+                    </select>
+                    <button onclick="addStudent()" class="btn btn-primary">حفظ الطالب</button>
+                </div>
+                <div id="std-msg" class="alert"></div>
+            </div>
+
+             <div id="assignments-tab" class="tab-content">
+                <h3>نشر واجب جديد</h3>
+                <textarea id="assign-text" class="input-field" placeholder="نص الواجب..."></textarea>
+                <button onclick="addAssignment()" class="btn btn-primary">نشر للطلاب</button>
             </div>
         </div>
+    </section>
 
-        <div class="db-panel">
-            <h3>📝 رفع تقرير (تجربة قاعدة البيانات)</h3>
-            <input type="text" id="report-title" class="input-field" placeholder="العنوان">
-            <textarea id="report-content" class="input-field" rows="4" placeholder="التفاصيل..."></textarea>
-            <div id="db-msg" class="alert"></div>
-            <button id="save-btn" class="btn btn-primary">حفظ التقرير</button>
+    <section id="student-view" style="display: none;">
+        <header style="background: var(--secondary);">
+            <div class="brand">
+                <img src="images/logo.png" class="header-logo">
+                <span>بوابة الطالب</span>
+            </div>
+            <button onclick="logout()" class="btn btn-danger small">تسجيل خروج</button>
+        </header>
+
+        <div class="container">
+            <div class="welcome-banner">
+                <h2>مرحباً بك في نظام الخدمات الطلابية</h2>
+                <p>يمكنك رفع الأعذار الطبية ومتابعة الواجبات من هنا</p>
+            </div>
+
+            <div class="grid-container">
+                <div class="card">
+                    <h3>📄 رفع إجازة مرضية</h3>
+                    <p>يجب رفع التقرير بصيغة PDF</p>
+                    <div class="form-stack">
+                        <input type="text" id="s-name" class="input-field" placeholder="الاسم الثلاثي">
+                        <input type="number" id="s-id" class="input-field" placeholder="رقم الهوية / الإقامة">
+                        <select id="s-class" class="input-field">
+                            <option value="أول ثانوي">أول ثانوي</option>
+                            <option value="ثاني ثانوي">ثاني ثانوي</option>
+                            <option value="ثالث ثانوي">ثالث ثانوي</option>
+                        </select>
+                        <label class="file-label">
+                            📎 اختر ملف التقرير (PDF)
+                            <input type="file" id="s-file" accept="application/pdf">
+                        </label>
+                        <div id="upload-progress"></div>
+                        <button onclick="uploadSickLeave()" id="upload-btn" class="btn btn-primary">رفع الطلب للمدير</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📝 آخر الواجبات</h3>
+                    <ul id="student-assignments-list">
+                        <li>جاري جلب الواجبات...</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </section>
 
