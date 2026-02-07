@@ -4,103 +4,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>منظومة Shagsu التعليمية</title>
-    <link rel="icon" href="images/logo.png" type="image/png">
+    
+    <link rel="icon" href="images/IMG_3825.png" type="image/png">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="loader"><div class="spinner"></div></div>
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>جاري تجهيز النظام...</p>
+    </div>
 
     <section id="auth-view">
-        <div class="login-wrapper">
-            <div class="brand-area">
-                <img src="images/logo.png" alt="Logo" class="animate-logo">
-                <h1>Shagsu Edu</h1>
-                <p>نظام الإدارة المدرسية الذكي</p>
-            </div>
+        <div class="login-card">
             
-            <div class="login-form-container">
+            <div class="brand-identity">
+                <img src="images/IMG_3825.png" alt="Logo" class="logo-img">
+                <div class="logo-text">
+                    <span>SHAGSU</span>
+                    <span class="highlight">EDU</span>
+                </div>
+            </div>
+
+            <p class="subtitle">بوابة التعليم الذكي والمستقبل الرقمي</p>
+            
+            <div class="login-actions">
                 <button onclick="loginWithGoogle()" class="btn-google">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
-                    تسجيل الدخول / إنشاء حساب عبر Google
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22">
+                    <span>تسجيل الدخول عبر Google</span>
                 </button>
                 
-                <div class="separator"><span>أو عبر البريد</span></div>
+                <div class="divider">أو</div>
 
-                <form id="email-login-form">
-                    <div class="input-box">
+                <form id="email-form">
+                    <div class="input-group">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+                        <input type="email" id="email" placeholder="البريد الإلكتروني">
                     </div>
-                    <div class="input-box">
+                    <div class="input-group">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="password" placeholder="كلمة المرور" required>
+                        <input type="password" id="password" placeholder="كلمة المرور">
                     </div>
-                    <div id="auth-error" class="alert error"></div>
-                    <button type="submit" class="btn-primary full">دخول</button>
+                    <button type="submit" class="btn-primary">دخول</button>
                 </form>
             </div>
         </div>
     </section>
 
-    <div id="role-selection-modal" class="modal">
-        <div class="modal-content role-content">
-            <h3>👋 أهلاً بك في Shagsu</h3>
-            <p>قبل البدء، الرجاء تحديد صفتك:</p>
-            <div class="role-grid">
-                <div class="role-card" onclick="completeGoogleSignup('admin')">
-                    <i class="fas fa-user-tie"></i>
-                    <span>مدير / وكيل</span>
+    <div id="role-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img src="images/IMG_3825.png" width="60">
+                <h3>أهلاً بك في العائلة!</h3>
+                <p>الرجاء تحديد صفتك لإعداد حسابك:</p>
+            </div>
+            
+            <div class="roles-grid">
+                <div class="role-card" onclick="selectRole('admin')">
+                    <div class="icon"><i class="fas fa-user-tie"></i></div>
+                    <h4>مدير / وكيل</h4>
                 </div>
-                <div class="role-card" onclick="completeGoogleSignup('teacher')">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <span>معلم</span>
+                <div class="role-card" onclick="selectRole('teacher')">
+                    <div class="icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h4>معلم</h4>
                 </div>
-                <div class="role-card" onclick="completeGoogleSignup('student')">
-                    <i class="fas fa-user-graduate"></i>
-                    <span>طالب</span>
+                <div class="role-card" onclick="selectRole('student')">
+                    <div class="icon"><i class="fas fa-user-graduate"></i></div>
+                    <h4>طالب</h4>
                 </div>
             </div>
         </div>
     </div>
 
     <section id="main-app" style="display: none;">
-        <header class="mobile-header">
-            <button onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-            <div class="logo-mobile">
-                <img src="images/logo.png" alt="Logo"> <span>Shagsu</span>
+        
+        <header class="top-header">
+            <button onclick="toggleSidebar()" class="menu-btn"><i class="fas fa-bars"></i></button>
+            
+            <div class="header-brand">
+                <img src="images/IMG_3825.png" alt="logo">
+                <span class="logo-text-sm">SHAGSU <span class="highlight">EDU</span></span>
             </div>
-            <div class="user-avatar-sm"><img id="header-avatar" src=""></div>
+
+            <div class="user-profile">
+                <img id="user-avatar" src="" alt="user">
+            </div>
         </header>
 
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-head">
-                <img src="images/logo.png" alt="Logo"> <h3>Shagsu</h3>
+            <div class="sidebar-header">
+                <div class="brand-identity small">
+                    <img src="images/IMG_3825.png" class="logo-img">
+                    <div class="logo-text">SHAGSU <span class="highlight">EDU</span></div>
+                </div>
             </div>
-            <nav class="nav-links">
-                <a href="#" onclick="navigate('dashboard')" class="active"><i class="fas fa-home"></i> الرئيسية</a>
+
+            <div class="user-info">
+                <h4 id="sidebar-name">...</h4>
+                <span class="role-badge" id="sidebar-role">...</span>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" onclick="navigate('dashboard')" class="active"><i class="fas fa-th-large"></i> الرئيسية</a>
+                
                 <div class="admin-only">
-                    <span class="nav-label">الإدارة</span>
+                    <span class="label">الإدارة</span>
                     <a href="#" onclick="navigate('students')"><i class="fas fa-users"></i> الطلاب</a>
+                    <a href="#" onclick="navigate('teachers')"><i class="fas fa-chalkboard"></i> المعلمين</a>
                 </div>
+
                 <div class="student-only">
-                    <span class="nav-label">أدواتي</span>
-                    <a href="#" onclick="navigate('assignments')"><i class="fas fa-book"></i> الواجبات</a>
+                    <span class="label">الطالب</span>
+                    <a href="#" onclick="navigate('assignments')"><i class="fas fa-book-open"></i> واجباتي</a>
+                    <a href="#" onclick="navigate('leaves')"><i class="fas fa-file-medical"></i> الإجازات</a>
                 </div>
-                <a href="#" onclick="logout()" class="logout-link"><i class="fas fa-sign-out-alt"></i> خروج</a>
+
+                <a href="#" onclick="logout()" class="logout"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</a>
             </nav>
         </aside>
 
-        <main class="content-wrapper">
+        <main class="content-area">
             <div id="view-dashboard" class="view active">
-                <h2>مرحباً <span id="dash-name"></span></h2>
-                <div class="stats-grid">
-                    <div class="stat-card"><h3 id="role-display">...</h3></div>
+                <div class="welcome-card">
+                    <h2>مرحباً بك في نظامك المدرسي 👋</h2>
+                    <p>كل ما تحتاجه لإدارة يومك الدراسي موجود هنا.</p>
+                </div>
+                <div class="stats-container">
+                    <div class="stat-box purple">
+                        <h3>الطلاب</h3>
+                        <p>1,250</p>
+                    </div>
+                    <div class="stat-box orange">
+                        <h3>الواجبات</h3>
+                        <p>5 نشطة</p>
+                    </div>
                 </div>
             </div>
-            </main>
+            
+            <div id="view-students" class="view">
+                <h2>سجل الطلاب</h2>
+                <p>محتوى صفحة الطلاب...</p>
+            </div>
+            
+            <div id="view-assignments" class="view">
+                <h2>الواجبات المدرسية</h2>
+                <p>محتوى الواجبات...</p>
+            </div>
+        </main>
     </section>
 
     <script type="module" src="script.js"></script>
