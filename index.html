@@ -3,35 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>منظومة Shagsu التعليمية الذكية</title>
+    <title>منظومة Shagsu التعليمية</title>
     <link rel="icon" href="images/logo.png" type="image/png">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="loader">
-        <div class="spinner"></div>
-        <p>جاري تحميل النظام...</p>
-    </div>
+    <div id="loader"><div class="spinner"></div></div>
 
     <section id="auth-view">
         <div class="login-wrapper">
             <div class="brand-area">
                 <img src="images/logo.png" alt="Logo" class="animate-logo">
                 <h1>Shagsu Edu</h1>
-                <p>الجيل القادم من الإدارة المدرسية</p>
+                <p>نظام الإدارة المدرسية الذكي</p>
             </div>
             
             <div class="login-form-container">
                 <button onclick="loginWithGoogle()" class="btn-google">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-                    تسجيل الدخول عبر Google
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+                    تسجيل الدخول / إنشاء حساب عبر Google
                 </button>
                 
-                <div class="separator"><span>أو</span></div>
+                <div class="separator"><span>أو عبر البريد</span></div>
 
                 <form id="email-login-form">
                     <div class="input-box">
@@ -43,142 +39,69 @@
                         <input type="password" id="password" placeholder="كلمة المرور" required>
                     </div>
                     <div id="auth-error" class="alert error"></div>
-                    <button type="submit" class="btn-primary full">دخول للنظام</button>
+                    <button type="submit" class="btn-primary full">دخول</button>
                 </form>
-                
-                <p class="toggle-link" onclick="toggleSignup()">ليس لديك حساب؟ إنشاء حساب جديد</p>
             </div>
         </div>
     </section>
 
+    <div id="role-selection-modal" class="modal">
+        <div class="modal-content role-content">
+            <h3>👋 أهلاً بك في Shagsu</h3>
+            <p>قبل البدء، الرجاء تحديد صفتك:</p>
+            <div class="role-grid">
+                <div class="role-card" onclick="completeGoogleSignup('admin')">
+                    <i class="fas fa-user-tie"></i>
+                    <span>مدير / وكيل</span>
+                </div>
+                <div class="role-card" onclick="completeGoogleSignup('teacher')">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>معلم</span>
+                </div>
+                <div class="role-card" onclick="completeGoogleSignup('student')">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>طالب</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section id="main-app" style="display: none;">
-        
         <header class="mobile-header">
-            <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <button onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
             <div class="logo-mobile">
-                <img src="images/logo.png" alt="Logo">
-                <span>Shagsu</span>
+                <img src="images/logo.png" alt="Logo"> <span>Shagsu</span>
             </div>
-            <div class="user-avatar-sm" onclick="toggleProfileMenu()">
-                <img src="https://ui-avatars.com/api/?name=User&background=random" id="header-avatar">
-            </div>
+            <div class="user-avatar-sm"><img id="header-avatar" src=""></div>
         </header>
 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-head">
-                <img src="images/logo.png" alt="Logo">
-                <h3>منصة Shagsu</h3>
+                <img src="images/logo.png" alt="Logo"> <h3>Shagsu</h3>
             </div>
-            
-            <div class="user-info-widget">
-                <div class="xp-circle">
-                    <svg viewBox="0 0 36 36" class="circular-chart orange">
-                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle" stroke-dasharray="75, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <text x="18" y="20.35" class="percentage">Lvl 5</text>
-                    </svg>
-                </div>
-                <div class="info-text">
-                    <h4 id="sidebar-name">جاري التحميل...</h4>
-                    <span class="role-badge" id="sidebar-role">طالب</span>
-                </div>
-            </div>
-
             <nav class="nav-links">
-                <a href="#" onclick="navigate('dashboard')" class="active"><i class="fas fa-th-large"></i> لوحة القيادة</a>
-                <a href="#" onclick="navigate('school-wall')"><i class="fas fa-newspaper"></i> حائط المدرسة <span class="badge-new">جديد</span></a>
-                
-                <div class="admin-links">
+                <a href="#" onclick="navigate('dashboard')" class="active"><i class="fas fa-home"></i> الرئيسية</a>
+                <div class="admin-only">
                     <span class="nav-label">الإدارة</span>
                     <a href="#" onclick="navigate('students')"><i class="fas fa-users"></i> الطلاب</a>
-                    <a href="#" onclick="navigate('teachers')"><i class="fas fa-chalkboard-teacher"></i> المعلمين</a>
                 </div>
-
-                <div class="student-links">
+                <div class="student-only">
                     <span class="nav-label">أدواتي</span>
                     <a href="#" onclick="navigate('assignments')"><i class="fas fa-book"></i> الواجبات</a>
-                    <a href="#" onclick="navigate('leaves')"><i class="fas fa-notes-medical"></i> الإجازات</a>
                 </div>
-
                 <a href="#" onclick="logout()" class="logout-link"><i class="fas fa-sign-out-alt"></i> خروج</a>
             </nav>
         </aside>
 
-        <main class="content-wrapper" onclick="closeSidebarOnMobile()">
-            
+        <main class="content-wrapper">
             <div id="view-dashboard" class="view active">
-                <div class="welcome-banner">
-                    <div class="text">
-                        <h2>مرحباً، <span id="dash-name">...</span> 👋</h2>
-                        <p>إليك ملخص ما يحدث في مدرستك اليوم.</p>
-                    </div>
-                    <img src="images/logo.png" class="banner-img">
-                </div>
-
+                <h2>مرحباً <span id="dash-name"></span></h2>
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="icon-box purple"><i class="fas fa-user-graduate"></i></div>
-                        <div><h3>الطلاب</h3><p id="stat-students">0</p></div>
-                    </div>
-                    <div class="stat-card orange">
-                        <div class="icon-box orange"><i class="fas fa-star"></i></div>
-                        <div><h3>نقاطي (XP)</h3><p id="stat-xp">1,250</p></div>
-                    </div>
-                    <div class="stat-card blue">
-                        <div class="icon-box blue"><i class="fas fa-tasks"></i></div>
-                        <div><h3>الواجبات</h3><p>3 نشطة</p></div>
-                    </div>
-                </div>
-
-                <div class="section-title"><h3>📌 آخر التحديثات</h3></div>
-                <div id="latest-wall-posts">
-                    </div>
-            </div>
-
-            <div id="view-school-wall" class="view">
-                <div class="wall-header">
-                    <h2><i class="fas fa-bullhorn"></i> أخبار المدرسة</h2>
-                    <button class="btn-primary admin-only" onclick="openModal('post-modal')"><i class="fas fa-plus"></i> خبر جديد</button>
-                </div>
-                
-                <div id="wall-feed" class="wall-feed">
-                    <div class="post-card skeleton"></div>
-                    <div class="post-card skeleton"></div>
+                    <div class="stat-card"><h3 id="role-display">...</h3></div>
                 </div>
             </div>
-
-            <div id="view-students" class="view">
-                <div class="table-header">
-                    <h2>سجلات الطلاب</h2>
-                    <button class="btn-primary" onclick="openModal('add-student-modal')">إضافة طالب</button>
-                </div>
-                <div class="table-responsive">
-                    <table class="modern-table">
-                        <thead>
-                            <tr>
-                                <th>الطالب</th>
-                                <th>المستوى</th>
-                                <th>النقاط</th>
-                                <th>إجراء</th>
-                            </tr>
-                        </thead>
-                        <tbody id="students-table"></tbody>
-                    </table>
-                </div>
-            </div>
-
-        </main>
+            </main>
     </section>
-
-    <div id="post-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('post-modal')">&times;</span>
-            <h3>نشر خبر جديد</h3>
-            <input type="text" id="post-title" placeholder="عنوان الخبر" class="input-std">
-            <textarea id="post-content" rows="4" placeholder="تفاصيل الخبر..." class="input-std"></textarea>
-            <button onclick="publishPost()" class="btn-primary full">نشر الآن</button>
-        </div>
-    </div>
 
     <script type="module" src="script.js"></script>
 </body>
