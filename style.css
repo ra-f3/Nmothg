@@ -1,6 +1,6 @@
 :root {
-    --primary: #252A34;   /* كحلي غامق جداً */
-    --accent: #FF2E63;    /* وردي محمر (لون مميز) */
+    --primary: #252A34;   /* كحلي غامق */
+    --accent: #FF2E63;    /* لون مميز (وردي/أحمر) */
     --teal: #08D9D6;      /* سماوي */
     --bg: #EAEAEA;
     --white: #ffffff;
@@ -11,79 +11,58 @@
 body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--primary); overflow-x: hidden; }
 
 /* =========================================
-   تصميم الشعار البرمجي (Logo Styling)
+   تصميم الشعار (Logo Styling)
    ========================================= */
 .brand-identity {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 15px; margin-bottom: 25px;
 }
 .logo-img {
-    height: 60px; /* حجم صورة الشعار */
-    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+    height: 70px; /* حجم الصورة */
+    width: auto;
+    object-fit: contain;
 }
 .logo-text {
-    font-size: 2rem;
-    font-weight: 900; /* خط عريض جداً */
+    font-size: 2.2rem;
+    font-weight: 900;
     color: var(--primary);
-    line-height: 1;
-    display: flex;
-    flex-direction: column; /* لجعل الكلمتين فوق بعض أو بجانب بعض */
-    text-align: left;
+    line-height: 0.9;
+    display: flex; flex-direction: column; text-align: left;
     letter-spacing: -1px;
 }
 .logo-text .highlight {
-    color: var(--accent); /* تلوين كلمة EDU */
-    font-size: 1.5rem;
+    color: var(--accent);
+    font-size: 1.4rem;
 }
+
 /* الشعار المصغر في الهيدر والقائمة */
 .brand-identity.small .logo-img { height: 40px; }
 .brand-identity.small .logo-text { font-size: 1.4rem; flex-direction: row; gap: 5px; }
+
 .header-brand { display: flex; align-items: center; gap: 10px; }
-.header-brand img { height: 35px; }
+.header-brand img { height: 35px; width: auto; }
 .logo-text-sm { font-weight: 800; font-size: 1.2rem; color: var(--primary); }
 .logo-text-sm .highlight { color: var(--accent); }
-
 
 /* =========================================
    شاشة الدخول (Login)
    ========================================= */
 #auth-view {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #f4f4f4;
+    min-height: 100vh; display: flex; justify-content: center; align-items: center; background: #f4f4f4; padding: 20px;
 }
 .login-card {
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    width: 90%;
-    max-width: 450px;
-    text-align: center;
+    background: white; padding: 40px; border-radius: 20px; box-shadow: var(--shadow);
+    width: 100%; max-width: 450px; text-align: center;
 }
 .subtitle { color: #666; margin-bottom: 30px; font-size: 0.95rem; }
 
 .btn-google {
-    width: 100%;
-    background: white;
-    border: 1px solid #ddd;
-    padding: 12px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    cursor: pointer;
-    font-weight: bold;
-    color: #444;
-    transition: 0.3s;
+    width: 100%; background: white; border: 1px solid #ddd; padding: 12px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    cursor: pointer; font-weight: bold; color: #444; transition: 0.3s;
 }
-.btn-google:hover { background: #f9f9f9; border-color: #bbb; }
+.btn-google:hover { background: #f9f9f9; border-color: #bbb; transform: translateY(-2px); }
+
 .divider { margin: 20px 0; color: #aaa; position: relative; font-size: 0.9rem; }
 .divider::before, .divider::after {
     content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: #eee;
@@ -93,7 +72,8 @@ body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--p
 .input-group { position: relative; margin-bottom: 15px; }
 .input-group i { position: absolute; right: 15px; top: 14px; color: #aaa; }
 .input-group input { width: 100%; padding: 12px 40px 12px 10px; border: 1px solid #eee; border-radius: 8px; background: #fcfcfc; }
-.btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+.btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.btn-primary:hover { background: #1a1e25; }
 
 /* =========================================
    نافذة اختيار الدور (Modal)
@@ -103,21 +83,25 @@ body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--p
     justify-content: center; align-items: center; padding: 20px;
 }
 .modal-content { background: white; width: 100%; max-width: 600px; border-radius: 20px; padding: 30px; text-align: center; }
-.roles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 25px; }
+.roles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-top: 25px; }
 .role-card {
     background: #f8f9fa; padding: 20px; border-radius: 15px; cursor: pointer; transition: 0.3s; border: 2px solid transparent;
 }
-.role-card:hover { border-color: var(--accent); background: #fff0f3; transform: translateY(-5px); }
+.role-card:hover { border-color: var(--accent); background: #fff5f7; transform: translateY(-5px); }
 .role-card .icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
 
 /* =========================================
-   التخطيط الرئيسي (Layout)
+   التخطيط (Layout) & Sidebar
    ========================================= */
 #main-app { display: flex; height: 100vh; }
 .top-header {
     position: fixed; top: 0; left: 0; right: 0; height: 60px; background: white; z-index: 100;
-    display: flex; justify-content: space-between; align-items: center; padding: 0 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: none; /* مخفي في الكمبيوتر */
+    display: flex; justify-content: space-between; align-items: center; padding: 0 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: none; /* مخفي في الكمبيوتر */
 }
+.menu-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+.user-profile img { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--accent); }
+
 .sidebar {
     width: 280px; background: white; height: 100vh; display: flex; flex-direction: column; border-left: 1px solid #eee; transition: 0.3s;
 }
@@ -135,11 +119,15 @@ body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--p
 .view.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.welcome-card { background: linear-gradient(135deg, var(--primary), #444); color: white; padding: 40px; border-radius: 20px; margin-bottom: 30px; }
+/* Cards & Stats */
+.welcome-card { background: linear-gradient(135deg, var(--primary), #3a4150); color: white; padding: 40px; border-radius: 20px; margin-bottom: 30px; }
 .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
 .stat-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-bottom: 4px solid #ddd; }
+.stat-box h3 { font-size: 0.9rem; color: #777; margin-bottom: 5px; }
+.stat-box p { font-size: 1.8rem; font-weight: bold; }
 .stat-box.purple { border-color: #8e44ad; }
 .stat-box.orange { border-color: var(--accent); }
+.stat-box.blue { border-color: var(--teal); }
 
 /* Responsive */
 @media (max-width: 900px) {
@@ -147,7 +135,6 @@ body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--p
     .sidebar.open { right: 0; }
     .top-header { display: flex; }
     .content-area { padding-top: 80px; }
-    .logo-text { font-size: 1.5rem; }
 }
 
 #loader { position: fixed; inset: 0; background: white; z-index: 3000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
