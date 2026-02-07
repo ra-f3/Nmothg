@@ -1,110 +1,155 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+:root {
+    --primary: #252A34;   /* كحلي غامق جداً */
+    --accent: #FF2E63;    /* وردي محمر (لون مميز) */
+    --teal: #08D9D6;      /* سماوي */
+    --bg: #EAEAEA;
+    --white: #ffffff;
+    --shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
 
-const firebaseConfig = {
-    apiKey: "AIzaSyDEecBUfiZlgYZZRnt4IoUfRRCBTRwOpjc",
-    authDomain: "shagsu-e847b.firebaseapp.com",
-    projectId: "shagsu-e847b",
-    storageBucket: "shagsu-e847b.firebasestorage.app",
-    messagingSenderId: "194121088471",
-    appId: "1:194121088471:web:9157152e8e724a903e9f92",
-    measurementId: "G-BGH2TX47WB"
-};
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--primary); overflow-x: hidden; }
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
+/* =========================================
+   تصميم الشعار البرمجي (Logo Styling)
+   ========================================= */
+.brand-identity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.logo-img {
+    height: 60px; /* حجم صورة الشعار */
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+}
+.logo-text {
+    font-size: 2rem;
+    font-weight: 900; /* خط عريض جداً */
+    color: var(--primary);
+    line-height: 1;
+    display: flex;
+    flex-direction: column; /* لجعل الكلمتين فوق بعض أو بجانب بعض */
+    text-align: left;
+    letter-spacing: -1px;
+}
+.logo-text .highlight {
+    color: var(--accent); /* تلوين كلمة EDU */
+    font-size: 1.5rem;
+}
+/* الشعار المصغر في الهيدر والقائمة */
+.brand-identity.small .logo-img { height: 40px; }
+.brand-identity.small .logo-text { font-size: 1.4rem; flex-direction: row; gap: 5px; }
+.header-brand { display: flex; align-items: center; gap: 10px; }
+.header-brand img { height: 35px; }
+.logo-text-sm { font-weight: 800; font-size: 1.2rem; color: var(--primary); }
+.logo-text-sm .highlight { color: var(--accent); }
 
-// متغير مؤقت لتخزين بيانات المستخدم أثناء اختيار الدور
-let pendingUser = null; 
 
-// 1. زر الدخول عبر جوجل
-window.loginWithGoogle = async () => {
-    try {
-        const result = await signInWithPopup(auth, googleProvider);
-        const user = result.user;
+/* =========================================
+   شاشة الدخول (Login)
+   ========================================= */
+#auth-view {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f4f4f4;
+}
+.login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+}
+.subtitle { color: #666; margin-bottom: 30px; font-size: 0.95rem; }
 
-        // التحقق: هل هذا المستخدم مسجل من قبل؟
-        const userRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(userRef);
+.btn-google {
+    width: 100%;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #444;
+    transition: 0.3s;
+}
+.btn-google:hover { background: #f9f9f9; border-color: #bbb; }
+.divider { margin: 20px 0; color: #aaa; position: relative; font-size: 0.9rem; }
+.divider::before, .divider::after {
+    content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: #eee;
+}
+.divider::before { left: 0; } .divider::after { right: 0; }
 
-        if (docSnap.exists()) {
-            // مسجل سابقاً -> أدخله مباشرة
-            console.log("مستخدم موجود");
-        } else {
-            // مستخدم جديد -> لا تدخله! أظهر نافذة اختيار الدور
-            pendingUser = user; // احفظه مؤقتاً
-            document.getElementById('role-selection-modal').style.display = 'flex';
-        }
-    } catch (error) {
-        alert("خطأ: " + error.message);
-    }
-};
+.input-group { position: relative; margin-bottom: 15px; }
+.input-group i { position: absolute; right: 15px; top: 14px; color: #aaa; }
+.input-group input { width: 100%; padding: 12px 40px 12px 10px; border: 1px solid #eee; border-radius: 8px; background: #fcfcfc; }
+.btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-// 2. دالة إكمال التسجيل بعد اختيار الدور
-window.completeGoogleSignup = async (selectedRole) => {
-    if (!pendingUser) return;
+/* =========================================
+   نافذة اختيار الدور (Modal)
+   ========================================= */
+.modal {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000;
+    justify-content: center; align-items: center; padding: 20px;
+}
+.modal-content { background: white; width: 100%; max-width: 600px; border-radius: 20px; padding: 30px; text-align: center; }
+.roles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 25px; }
+.role-card {
+    background: #f8f9fa; padding: 20px; border-radius: 15px; cursor: pointer; transition: 0.3s; border: 2px solid transparent;
+}
+.role-card:hover { border-color: var(--accent); background: #fff0f3; transform: translateY(-5px); }
+.role-card .icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
 
-    try {
-        // الآن نحفظه في قاعدة البيانات مع الدور الذي اختاره
-        await setDoc(doc(db, "users", pendingUser.uid), {
-            name: pendingUser.displayName,
-            email: pendingUser.email,
-            photo: pendingUser.photoURL,
-            role: selectedRole, // الدور الذي اختاره (admin/teacher/student)
-            createdAt: new Date(),
-            xp: 0,
-            level: 1
-        });
+/* =========================================
+   التخطيط الرئيسي (Layout)
+   ========================================= */
+#main-app { display: flex; height: 100vh; }
+.top-header {
+    position: fixed; top: 0; left: 0; right: 0; height: 60px; background: white; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center; padding: 0 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: none; /* مخفي في الكمبيوتر */
+}
+.sidebar {
+    width: 280px; background: white; height: 100vh; display: flex; flex-direction: column; border-left: 1px solid #eee; transition: 0.3s;
+}
+.sidebar-header { padding: 30px; text-align: center; border-bottom: 1px solid #f0f0f0; }
+.user-info { padding: 20px; text-align: center; background: #f9f9f9; margin: 10px 20px; border-radius: 10px; }
+.role-badge { background: var(--accent); color: white; font-size: 0.8rem; padding: 2px 8px; border-radius: 5px; }
 
-        // إخفاء النافذة
-        document.getElementById('role-selection-modal').style.display = 'none';
-        // (المراقب onAuthStateChanged سيكمل الباقي ويفتح التطبيق)
-        
-    } catch (e) {
-        alert("حدث خطأ في الحفظ: " + e.message);
-    }
-};
+.nav-menu { padding: 20px; flex: 1; }
+.nav-menu a { display: flex; align-items: center; gap: 15px; padding: 12px; color: #666; text-decoration: none; border-radius: 8px; margin-bottom: 5px; transition: 0.3s; }
+.nav-menu a:hover, .nav-menu a.active { background: var(--primary); color: white; }
+.label { font-size: 0.8rem; color: #aaa; margin: 15px 0 5px; display: block; font-weight: bold; }
 
-// 3. مراقب الحالة (يوجه المستخدم حسب دوره)
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        const docSnap = await getDoc(doc(db, "users", user.uid));
-        
-        // إذا كان المستخدم جديداً ولم يختر دوره بعد، لا تفعل شيئاً (انتظر النافذة)
-        if (!docSnap.exists()) return; 
+.content-area { flex: 1; padding: 30px; overflow-y: auto; background: var(--bg); }
+.view { display: none; animation: fadeIn 0.4s; }
+.view.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        const userData = docSnap.data();
-        
-        // إعداد الواجهة
-        document.getElementById('auth-view').style.display = 'none';
-        document.getElementById('main-app').style.display = 'flex';
-        document.getElementById('dash-name').innerText = userData.name;
-        document.getElementById('header-avatar').src = userData.photo;
-        document.getElementById('role-display').innerText = 
-            userData.role === 'admin' ? 'مدير النظام' : 
-            userData.role === 'teacher' ? 'معلم' : 'طالب';
+.welcome-card { background: linear-gradient(135deg, var(--primary), #444); color: white; padding: 40px; border-radius: 20px; margin-bottom: 30px; }
+.stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.stat-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-bottom: 4px solid #ddd; }
+.stat-box.purple { border-color: #8e44ad; }
+.stat-box.orange { border-color: var(--accent); }
 
-        // إخفاء/إظهار العناصر حسب الدور
-        if (userData.role === 'student') {
-            document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.student-only').forEach(el => el.style.display = 'block');
-        } else {
-            document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
-            document.querySelectorAll('.student-only').forEach(el => el.style.display = 'none');
-        }
-    } else {
-        document.getElementById('auth-view').style.display = 'flex';
-        document.getElementById('main-app').style.display = 'none';
-    }
-    document.getElementById('loader').style.display = 'none';
-});
+/* Responsive */
+@media (max-width: 900px) {
+    .sidebar { position: fixed; right: -280px; z-index: 200; height: 100%; box-shadow: -5px 0 20px rgba(0,0,0,0.1); }
+    .sidebar.open { right: 0; }
+    .top-header { display: flex; }
+    .content-area { padding-top: 80px; }
+    .logo-text { font-size: 1.5rem; }
+}
 
-window.logout = () => signOut(auth);
-window.navigate = (id) => {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById(`view-${id}`).classList.add('active');
-};
-window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('open');
+#loader { position: fixed; inset: 0; background: white; z-index: 3000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.spinner { width: 40px; height: 40px; border: 4px solid #eee; border-top-color: var(--accent); border-radius: 50%; animation: spin 1s infinite linear; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
